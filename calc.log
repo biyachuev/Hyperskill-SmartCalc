@@ -1,0 +1,288 @@
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "2*6"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "2*6"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "2 * 6"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 2 6 *
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 12
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "2-2+3"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "2-2+3"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "2 - 2 + 3"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 2 2 - 3 +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 3
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "8*3+12*(4-2)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "8*3+12*(4-2)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "8 * 3 + 12 * ( 4 - 2 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 8 3 * 12 4 2 - * +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 48
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "-10"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: this is number
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = -10
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "3+8*((4+3)*2+1)-6/(2+1)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "3+8*((4+3)*2+1)-6/(2+1)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "3 + 8 * ( ( 4 + 3 ) * 2 + 1 ) - 6 / ( 2 + 1 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 3 8 4 3 + 2 * 1 + * + 6 2 1 + / -
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 121
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "-1+2^5/(5*4--+1)+10-11*(2-4)---7+++-9"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "-1+2^5/(5*4+1)+10-11*(2-4)-7-9"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 0 - 1 ) + 2 ^ 5 / ( 5 * 4 + 1 ) + 10 - 11 * ( 2 - 4 ) - 7 - 9"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 1 - 2 5 ^ 5 4 * 1 + / + 10 + 11 2 4 - * - 7 - 9 -
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 16
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "2^2"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "2^2"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "2 ^ 2"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 2 2 ^
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 4
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "2*2^3"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "2*2^3"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "2 * 2 ^ 3"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 2 2 3 ^ *
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 16
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "2^(-2)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "2^(-2)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "2 ^ ( 0 - 2 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 2 0 2 - ^
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 0
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "4+3)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "4+3)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Balance for "()" < 0
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "4*(2+3"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "4*(2+3"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Balance for "()" != 0
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "3***5"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: *..* or /../ or ^..^ not allowed
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "1+++2*3--4"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "1+2*3+4"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "1 + 2 * 3 + 4"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 1 2 3 * + 4 +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 11
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "1+++2*3--4"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "1+2*3+4"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "1 + 2 * 3 + 4"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 1 2 3 * + 4 +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 11
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "-2*(-a)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "-2*(-a)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 0 - 2 ) * ( 0 - ( 0 - 2 ) )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 2 - 0 0 2 - - *
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = -4
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "2/(-4)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "2/(-4)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "2 / ( 0 - 4 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 2 0 4 - /
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 0
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "0/5"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "0/5"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "0 / 5"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 5 /
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 0
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "12/06"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "12/06"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "12 / 06"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 12 06 /
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 2
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "12/-06"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "12/-06"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: validate: restricted sequence of operands
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "6/08"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "6/08"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "6 / 08"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 6 08 /
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 0
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "0/a"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "0/a"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "0 / 0"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 0 /
+Aug 05, 2020 8:16:31 PM Calc compute
+INFO: Division by zero
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "a/0"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "a/0"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "0 / 0"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 0 /
+Aug 05, 2020 8:16:31 PM Calc compute
+INFO: Division by zero
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc processVariables
+INFO: 0 знаков =, и не нашли переменную в varList
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Unknown variable
+Aug 05, 2020 8:16:31 PM Calc processVariables
+INFO: 0 знаков =, есть пробелы, которых быть не должно
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = Invalid expression
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "-12+12+-4+5--6---7++++-9+a+b+9---c"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "-12+12-4+5+6-7-9+a+b+9-c"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 0 - 12 ) + 12 - 4 + 5 + 6 - 7 - 9 + 4 + 5 + 9 - 6"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 12 - 12 + 4 - 5 + 6 + 7 - 9 - 4 + 5 + 9 + 6 -
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 3
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "a*2+b*3+c*(2+3)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "a*2+b*3+c*(2+3)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "4 * 2 + 5 * 3 + 6 * ( 2 + 3 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 4 2 * 5 3 * + 6 2 3 + * +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 53
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "-1+2^5/(5*4+1)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "-1+2^5/(5*4+1)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 0 - 1 ) + 2 ^ 5 / ( 5 * 4 + 1 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 1 - 2 5 ^ 5 4 * 1 + / +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 0
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "-1+2^5/(5*4+1)+a"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "-1+2^5/(5*4+1)+a"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 0 - 1 ) + 2 ^ 5 / ( 5 * 4 + 1 ) + ( 0 - 2 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 0 1 - 2 5 ^ 5 4 * 1 + / + 0 2 - +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = -2
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "(5*4+1)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Transform: ++/-- -> +, +- -> -: "(5*4+1)"
+Aug 05, 2020 8:16:31 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 5 * 4 + 1 )"
+Aug 05, 2020 8:16:31 PM Calc infixToPostfix
+INFO: result = 5 4 * 1 +
+Aug 05, 2020 8:16:31 PM Calc printResult
+INFO: result = 21
