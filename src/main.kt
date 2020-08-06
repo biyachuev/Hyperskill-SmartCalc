@@ -1,12 +1,13 @@
-import kotlin.math.pow
 import java.util.logging.*
+import java.math.BigInteger
 
-// TODO github
 // TODO убрать cтремный код
-// TODO БЛИН, мой расчудесный код падает на 100000000000 + 100000000000000000000, та же история с Double и Float
+// TODO try/catch 100000000000 + 100000000000000000000, та же история с Double и Float
 // TODO поисследовать varList = mutableMapOf<String, Int>("" to 0) по аналогии с Stk может можно убрать !! и prio (Null to 0)
 // TODO убрать русские комменты
 // TODO где можно try, например, просто проверять toInt вместо сложных проверок на /d
+// TODO BigInteger mode только когда он действительно нужен
+// TODO BigInteger as class
 
 const val VALIDATION_ERROR = "ERROR"
 const val SUCCESSFUL = "SUCCESS"
@@ -28,7 +29,7 @@ const val HELP_MSG = """Smart Calculator for [Big]integer values. Supported oper
 
 object Calc {
     private var isExit: Boolean = false
-    private var varList = mutableMapOf("" to 0)    // list of variables created by user
+    private var varList = mutableMapOf<String, BigInteger>("" to BigInteger.ZERO)    // list of variables created by user
     private val prio = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
     var result: String = ""
     private val logger = Logger.getLogger(Calc::class.qualifiedName)
@@ -131,7 +132,7 @@ object Calc {
         // проверяем на a = -2 или a = b
         if (right.filter { !it.isLetter() } != "") // проверяем условие справа от равно только буквы
             try {
-                right.toInt()
+                right.toBigInteger() // result = BigInteger
             }
             catch (e: Exception) {
                 result = INVALID_ASSIGNMENT
@@ -140,9 +141,9 @@ object Calc {
             }
 
         // so we have correct syntax here e.g. a=-2 or a=b
-        var res: Int = 0
+        var res = BigInteger.ZERO
         res = when {
-            "\\d".toRegex().containsMatchIn(right) -> right.toInt()
+            "\\d".toRegex().containsMatchIn(right) -> right.toBigInteger() // легко меняется на toBigInteger
             right in varList.keys -> varList[right]!!
             else -> {
                 result = INVALID_EXPR
@@ -153,7 +154,7 @@ object Calc {
 
         //  это что??? стремный код
         when (left) {
-            in varList.keys -> varList[left] = res
+            in varList.keys -> varList[left] = res // проверить можно ли иметь mutableList с BigInteger
             else -> varList[left] = res
         }
     }
@@ -206,9 +207,9 @@ object Calc {
         expr = expr.replace(" ", "")
         logger.info("Transform: whitespaces removed: \"$expr\"")
 
-        // Validate: if expr is a simple negative number
+        // Validate: if expr is a negative number only
         try {
-            result = s.toInt().toString()
+            result = s.toBigInteger().toString() // проверить
             logger.info("this is number")
             return SUCCESSFUL
         }
@@ -296,7 +297,7 @@ object Calc {
         for (part in expr.split(" ")) {
             if (part[0].isLetter())
                 if (part in varList) {
-                    temp += if (varList[part]!! >= 0) varList[part]!!.toString() + " "
+                    temp += if (varList[part]!! >= BigInteger.ZERO) varList[part]!!.toString() + " "
                     else "( 0 - " + varList[part]!!.toString().drop(1) + " ) "
                 }
                 else {
@@ -312,14 +313,14 @@ object Calc {
     }
 
     private fun compute(s2: String, s1: String, op: String): String {
-        val a = s1.toInt()
-        val b = s2.toInt()
-        var res: Int = 0
+        val a = s1.toBigInteger()
+        val b = s2.toBigInteger()
+        var res = BigInteger.ZERO
         when (op) {
             "+" -> res = a + b
             "-" -> res = a - b
             "/" -> {
-                if (b != 0) {
+                if (b != BigInteger.ZERO) {
                     res = a / b
                 }
                 else {
@@ -328,9 +329,22 @@ object Calc {
                 }
             }
             "*" -> res = a * b
-            "^" -> res = a.toDouble().pow(b.toDouble()).toInt()
+            "^" -> {
+                var i = BigInteger.ONE
+                res = a
+                when {
+                    b == BigInteger.ZERO -> res = BigInteger.ONE
+                    b < BigInteger.ZERO -> res = BigInteger.ZERO
+                    else -> {
+                        while (i != b) {
+                            res *= a
+                            i++
+                        }
+                    }
+                }
+            }
             else -> {
-                logger.info("Неподдерживаемый операнд")
+                logger.info("Unsupported operand. Only +-/*^ are supported.")
                 return VALIDATION_ERROR
             }
         }
