@@ -1,10 +1,4 @@
-Aug 06, 2020 8:48:38 PM Calc validateAndTransform
-INFO: Transform: whitespaces removed: "1+1"
-Aug 06, 2020 8:48:38 PM Calc validateAndTransform
-INFO: Transform: ++/-- -> +, +- -> -: "1+1"
-Aug 06, 2020 8:48:38 PM Calc validateAndTransform
-INFO: Validate: all variables are known: "1 + 1"
-Aug 06, 2020 8:48:38 PM Calc infixToPostfix
-INFO: result = 1 1 +
-Aug 06, 2020 8:48:38 PM Calc printResult
-INFO: result = 2
+Aug 25, 2020 11:09:25 PM Calc printResult
+INFO: result = 
+Aug 25, 2020 11:09:25 PM Calc printResult
+INFO: result = 5
