@@ -21,9 +21,7 @@ const val HELP_MSG = """Smart Calculator for [Big]integer values. Supported oper
 
 object Calc {
     private var isExit: Boolean = false
-//    private var varList = mutableMapOf<String, BigInteger>("" to BigInteger.ZERO)    // list of variables created by user
     private var varList: MutableMap<String, BigInteger> = mutableMapOf()    // list of variables created by user
-//    private val priority = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
     private val priority: Map<String, Int> = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
 
     var result: String = ""
