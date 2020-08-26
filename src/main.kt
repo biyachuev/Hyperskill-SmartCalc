@@ -1,9 +1,6 @@
 import java.util.logging.*
 import java.math.BigInteger
 
-// TODO поисследовать varList = mutableMapOf<String, Int>("" to 0) по аналогии с Stk может можно убрать !! и prio (Null to 0)
-// TODO убрать русские комменты
-
 const val ERROR = "ERROR"
 const val SUCCESSFUL = "SUCCESS"
 
@@ -24,8 +21,11 @@ const val HELP_MSG = """Smart Calculator for [Big]integer values. Supported oper
 
 object Calc {
     private var isExit: Boolean = false
-    private var varList = mutableMapOf<String, BigInteger>("" to BigInteger.ZERO)    // list of variables created by user
-    private val prio = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
+//    private var varList = mutableMapOf<String, BigInteger>("" to BigInteger.ZERO)    // list of variables created by user
+    private var varList: MutableMap<String, BigInteger> = mutableMapOf()    // list of variables created by user
+//    private val priority = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
+    private val priority: Map<String, Int> = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
+
     var result: String = ""
     private val logger = Logger.getLogger(Calc::class.qualifiedName)
     private val fileHandler = FileHandler("/Users/biyachuev/Documents/Projects_Kotlin/HyperSkill_SmartCalc/calc.log")
@@ -155,28 +155,35 @@ object Calc {
         var res = ""
         for (part in expr.split(" ")) {
             logger.fine("part = $part")
-            when {
-                part[0].isDigit() -> res += "$part "
-                Stk.isEmpty() || Stk.peek() == "(" -> Stk.push(part)
-                part == "(" -> Stk.push(part)
-                part == ")" -> {
-                    do {
-                        res += Stk.pop() + " "
-                    } while (Stk.peek() != "(")
-                    Stk.pop()       // discard left parentheses
+            try {
+//                val stkPeekValue = Stk?.peek() ?: -1
+                when {
+                    part[0].isDigit() -> res += "$part "
+                    Stk.isEmpty() || Stk.peek() == "(" -> Stk.push(part)
+                    part == "(" -> Stk.push(part)
+                    part == ")" -> {
+                        do {
+                            res += Stk.pop() + " "
+                        } while (Stk.peek() != "(")
+                        Stk.pop()       // discard left parentheses
+                    }
+                    priority.getValue(part) > priority[Stk.peek()]!! -> Stk.push(part)
+                    priority.getValue(part) <= priority[Stk.peek()]!! -> {
+                        loop@ do {
+                            res += Stk.pop() + " "
+                            if (!Stk.isEmpty())
+                                when {
+                                    Stk.peek() == "(" -> break@loop
+                                    priority[Stk.peek()]!! < priority.getValue(part) -> break@loop
+                                }
+                        } while (!Stk.isEmpty())
+                        Stk.push(part)
+                    }
                 }
-                prio[part]!! > prio[Stk.peek()]!! -> Stk.push(part)
-                prio[part]!! <= prio[Stk.peek()]!! -> {
-                    loop@ do {
-                        res += Stk.pop() + " "
-                        if (!Stk.isEmpty())
-                            when {
-                                Stk.peek() == "(" -> break@loop
-                                prio[Stk.peek()]!! < prio[part]!! -> break@loop
-                            }
-                    } while (!Stk.isEmpty())
-                    Stk.push(part)
-                }
+            }
+            catch (e: Exception) {
+                logger.warning("Some error")
+                return ERROR
             }
         }
 

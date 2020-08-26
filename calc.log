@@ -1,4 +1,32 @@
-Aug 25, 2020 11:09:25 PM Calc printResult
+Aug 26, 2020 3:15:06 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "(-1)*a"
+Aug 26, 2020 3:15:06 PM Calc validateAndTransform
+INFO: Validate: Unsuccessful validation with toBigInteger() if the expr is a negative number e.g. -5
+Aug 26, 2020 3:15:06 PM Calc validateAndTransform
+INFO: Transform: ++/--   ->   +,    +-   ->   -   : "(-1)*a"
+Aug 26, 2020 3:15:06 PM Calc validateAndTransform
+INFO: Transform: "(-" -> "(0-" just to present "-a" as "(0-a)"
+Aug 26, 2020 3:15:06 PM Calc validateAndTransform
+INFO: Transform: "- 2 + ..." -> "(0 - 2) + ...
+Aug 26, 2020 3:15:06 PM Calc validateAndTransform
+WARNING: Validate: unknown variable
+Aug 26, 2020 3:15:06 PM Calc printResult
+INFO: result = Invalid expression
+Aug 26, 2020 3:15:08 PM Calc printResult
 INFO: result = 
-Aug 25, 2020 11:09:25 PM Calc printResult
-INFO: result = 5
+Aug 26, 2020 3:15:12 PM Calc validateAndTransform
+INFO: Transform: whitespaces removed: "(-1)*a"
+Aug 26, 2020 3:15:12 PM Calc validateAndTransform
+INFO: Validate: Unsuccessful validation with toBigInteger() if the expr is a negative number e.g. -5
+Aug 26, 2020 3:15:12 PM Calc validateAndTransform
+INFO: Transform: ++/--   ->   +,    +-   ->   -   : "(-1)*a"
+Aug 26, 2020 3:15:12 PM Calc validateAndTransform
+INFO: Transform: "(-" -> "(0-" just to present "-a" as "(0-a)"
+Aug 26, 2020 3:15:12 PM Calc validateAndTransform
+INFO: Transform: "- 2 + ..." -> "(0 - 2) + ...
+Aug 26, 2020 3:15:12 PM Calc validateAndTransform
+INFO: Validate: all variables are known: "( 0 - 1 ) * 2"
+Aug 26, 2020 3:15:12 PM Calc infixToPostfix
+INFO: result = 0 1 - 2 *
+Aug 26, 2020 3:15:12 PM Calc printResult
+INFO: result = -2
