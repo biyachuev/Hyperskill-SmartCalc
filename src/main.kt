@@ -154,7 +154,6 @@ object Calc {
         for (part in expr.split(" ")) {
             logger.fine("part = $part")
             try {
-//                val stkPeekValue = Stk?.peek() ?: -1
                 when {
                     part[0].isDigit() -> res += "$part "
                     Stk.isEmpty() || Stk.peek() == "(" -> Stk.push(part)
