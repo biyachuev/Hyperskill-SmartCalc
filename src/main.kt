@@ -76,17 +76,17 @@ object Calc {
         when (expr.filter { it == '=' }.count()) {
             // no "=" -> simply need to print value of variable/number e.g. "a" or "-2"
             0 -> when {
-                expr.filter { it.isWhitespace() }.count() > 0 -> {
+                expr.any { it.isWhitespace() } -> {
                     result = INVALID_EXPR
                     logger.warning("""Expression has zero equal signs and there spaces which are not allowed, e.g. "2 0 2""""")
                     return
                 }
-                expr.filter { !it.isDigit() } == "" -> {
+                expr.any { it.isDigit() } -> {
                     result = expr
                     logger.info("Expression is the number because there are no equal signs and expression contains at least 1 digit")
                     return
                 }
-                expr.filter { !it.isDigit() && !it.isLetter() } != "" -> {
+                expr.any { !it.isDigit() && !it.isLetter() } -> {
                     result = INVALID_EXPR
                     logger.warning("Unacceptable characters in expression")
                     return
