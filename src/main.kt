@@ -1,14 +1,7 @@
-import kotlin.math.pow
 import java.util.logging.*
+import java.math.BigInteger
 
-// TODO github
-// TODO убрать cтремный код
-// TODO БЛИН, мой расчудесный код падает на 100000000000 + 100000000000000000000, та же история с Double и Float
-// TODO поисследовать varList = mutableMapOf<String, Int>("" to 0) по аналогии с Stk может можно убрать !! и prio (Null to 0)
-// TODO убрать русские комменты
-// TODO где можно try, например, просто проверять toInt вместо сложных проверок на /d
-
-const val VALIDATION_ERROR = "ERROR"
+const val ERROR = "ERROR"
 const val SUCCESSFUL = "SUCCESS"
 
 const val UNKNOWN_CMD = "Unknown command"
@@ -28,11 +21,12 @@ const val HELP_MSG = """Smart Calculator for [Big]integer values. Supported oper
 
 object Calc {
     private var isExit: Boolean = false
-    private var varList = mutableMapOf("" to 0)    // list of variables created by user
-    private val prio = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
+    private var varList: MutableMap<String, BigInteger> = mutableMapOf()    // list of variables created by user
+    private val priority: Map<String, Int> = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2, "^" to 3)
+
     var result: String = ""
     private val logger = Logger.getLogger(Calc::class.qualifiedName)
-    private val fileHandler = FileHandler("calc.log")
+    private val fileHandler = FileHandler("/Users/biyachuev/Documents/Projects_Kotlin/HyperSkill_SmartCalc/calc.log")
 
     init {
         logger.addHandler(fileHandler)
@@ -49,7 +43,7 @@ object Calc {
         fun peek(): String? = myStack.lastOrNull()
     }
 
-    fun printResult() {
+    private fun printResult() {
         if (result.isNotEmpty()) println(result)
         logger.info("result = $result")
     }
@@ -61,7 +55,7 @@ object Calc {
             s.startsWith('/') -> executeCmd(s)                                              // "/exit" or "/help"
             s.contains('=') -> processVariables(s)                                          // " a = -1 " or "a=b"
             s.filter { it in listOf('+', '-', '/', '*', '^') } == "" -> processVariables(s) // "a" or "2 3" or "a 2"
-            else -> calculate(s)                                                            // выражение или просто отрицательное число, например, "-2"
+            else -> calculate(s)                                                            // expression or simple negative number e.g. "-2"
         }
         printResult()
     }
@@ -80,34 +74,38 @@ object Calc {
         var expr = s.trim()
 
         when (expr.filter { it == '=' }.count()) {
-            // no "=" -> need to print value of variable/number e.g. "a" or "-2"
+            // no "=" -> simply need to print value of variable/number e.g. "a" or "-2"
             0 -> when {
-                expr.filter { it.isWhitespace() }.count() > 0 -> { // e.g. "2 0 2"
+                expr.any { it.isWhitespace() } -> {
                     result = INVALID_EXPR
-                    logger.info("0 знаков =, есть пробелы, которых быть не должно")
+                    logger.warning("""Expression has zero equal signs and there spaces which are not allowed, e.g. "2 0 2""""")
                     return
                 }
-                expr.filter { it.isDigit() }.count() > 0 -> {
+                expr.any { it.isDigit() } -> {
                     result = expr
-                    logger.info("0 знаков =, и есть хотя бы одна цифра -> значит имеем дело с числом")
+                    logger.info("Expression is the number because there are no equal signs and expression contains at least 1 digit")
+                    return
+                }
+                expr.any { !it.isDigit() && !it.isLetter() } -> {
+                    result = INVALID_EXPR
+                    logger.warning("Unacceptable characters in expression")
                     return
                 }
                 expr in varList.keys -> {
                     result = varList[expr].toString()
+                    logger.info("variable $expr is found")
                     return
                 }
                 else -> {
                     result = UNKNOWN_VAR
-                    logger.info("0 знаков =, и не нашли переменную в varList")
+                    logger.warning("Expression contains 0 equal signs and the variable in expression is not in the list of known variables - varList")
                     return
                 }
             }
-            // операция присваивания разбирается ниже
-            1 -> { }
-            // several "=" found
+            1 -> { }   // the assignment "=" operation is processed below
             else -> {
                 result = INVALID_ASSIGNMENT
-                logger.info("More than 1 equal \"=\" sign")
+                logger.warning("Expression contains more than one equal sign.")
                 return
             }
         }
@@ -118,72 +116,72 @@ object Calc {
 
         if (right == "" || left == "") {
             result = INVALID_ASSIGNMENT
-            logger.info("справа или слева пусто")
+            logger.warning("Expression to the right or left of the equal sign contains an empty value")
             return
         }
 
-        if (left.filter { !it.isLetter() } != "") { // only letters must be before "="
+        if (left.filter { !it.isLetter() } != "") {
             result = INVALID_ID
-            logger.info("слева от равно, содержит что-то помимо букв - что запрещено для переменной")
+            logger.warning("The left side of the equal sign contains invalid characters")
             return
         }
 
-        // проверяем на a = -2 или a = b
-        if (right.filter { !it.isLetter() } != "") // проверяем условие справа от равно только буквы
+        if (right.filter { !it.isLetter() } != "")
             try {
-                right.toInt()
-            }
-            catch (e: Exception) {
+                right.toBigInteger()
+            } catch (e: Exception) {
                 result = INVALID_ASSIGNMENT
-                logger.info("Справа от присваивания что-то неправильное")
+                logger.warning("On the right side of the expression can only be letters (e.g. a = b) or a negative number (e.g. a = -2)")
                 return
             }
 
         // so we have correct syntax here e.g. a=-2 or a=b
-        var res: Int = 0
+        val res: BigInteger
         res = when {
-            "\\d".toRegex().containsMatchIn(right) -> right.toInt()
+            "\\d".toRegex().containsMatchIn(right) -> right.toBigInteger()
             right in varList.keys -> varList[right]!!
             else -> {
                 result = INVALID_EXPR
-                logger.info("Не нашли такую переменную после =")
+                logger.warning("On the right side of the expression is an unknown variable")
                 return
             }
         }
-
-        //  это что??? стремный код
-        when (left) {
-            in varList.keys -> varList[left] = res
-            else -> varList[left] = res
-        }
+        varList[left] = res
     }
 
     private fun infixToPostfix(expr: String):String {
         var res = ""
         for (part in expr.split(" ")) {
             logger.fine("part = $part")
-            when {
-                part[0].isDigit() -> res += "$part "
-                Stk.isEmpty() || Stk.peek() == "(" -> Stk.push(part)
-                part == "(" -> Stk.push(part)
-                part == ")" -> {
-                    do {
-                        res += Stk.pop() + " "
-                    } while (Stk.peek() != "(")
-                    Stk.pop() // discard left parentheses
+            try {
+//                val stkPeekValue = Stk?.peek() ?: -1
+                when {
+                    part[0].isDigit() -> res += "$part "
+                    Stk.isEmpty() || Stk.peek() == "(" -> Stk.push(part)
+                    part == "(" -> Stk.push(part)
+                    part == ")" -> {
+                        do {
+                            res += Stk.pop() + " "
+                        } while (Stk.peek() != "(")
+                        Stk.pop()       // discard left parentheses
+                    }
+                    priority.getValue(part) > priority[Stk.peek()]!! -> Stk.push(part)
+                    priority.getValue(part) <= priority[Stk.peek()]!! -> {
+                        loop@ do {
+                            res += Stk.pop() + " "
+                            if (!Stk.isEmpty())
+                                when {
+                                    Stk.peek() == "(" -> break@loop
+                                    priority[Stk.peek()]!! < priority.getValue(part) -> break@loop
+                                }
+                        } while (!Stk.isEmpty())
+                        Stk.push(part)
+                    }
                 }
-                prio[part]!! > prio[Stk.peek()]!! -> Stk.push(part)
-                prio[part]!! <= prio[Stk.peek()]!! -> {
-                    loop@ do {
-                        res += Stk.pop() + " "
-                        if (!Stk.isEmpty())
-                            when {
-                                Stk.peek() == "(" -> break@loop
-                                prio[Stk.peek()]!! < prio[part]!! -> break@loop // подумать как сделать лучше
-                            }
-                    } while (!Stk.isEmpty()) // наверняка это можно отрефакторить
-                    Stk.push(part)
-                }
+            }
+            catch (e: Exception) {
+                logger.warning("Some error")
+                return ERROR
             }
         }
 
@@ -193,62 +191,43 @@ object Calc {
     }
 
     private fun validateAndTransform (s: String): String {
-        var temp = ""
-        var expr = s
-
-        // Transform: //combinations like "88 22" are not valid
-        if ("""\d\s+\d""".toRegex().containsMatchIn(expr)) {
-            result = INVALID_EXPR
-            logger.info("Validate: combinations like \"88 22\" are not valid")
-            return VALIDATION_ERROR
-        }
-
-        expr = expr.replace(" ", "")
+        var expr = s.replace(" ", "")
         logger.info("Transform: whitespaces removed: \"$expr\"")
 
-        // Validate: if expr is a simple negative number
         try {
-            result = s.toInt().toString()
-            logger.info("this is number")
+            result = s.toBigInteger().toString()
+            logger.info("Validate: this is a valid negative number")
             return SUCCESSFUL
         }
         catch (e: Exception) {
-            null
+            logger.info("Validate: Unsuccessful validation with toBigInteger() if the expr is a negative number e.g. -5")
         }
 
-        // Validate:  *..* or /../ or ^..^ not allowed
         if ("""(.*(\*{2,}).*)|(.*(/{2,}).*)|(.*(\^{2,}).*)""".toRegex().containsMatchIn(expr)) {
             result = INVALID_EXPR
-            logger.info("Validate: *..* or /../ or ^..^ not allowed")
-            return VALIDATION_ERROR
+            logger.warning("Validate: *..* or /../ or ^..^ not allowed")
+            return ERROR
         }
 
-        // Transform: ++/-- -> +
-        while ("""(\+\+)|(--)""".toRegex().containsMatchIn(expr)) {
-            expr = expr.replace("""(\+\+)|(--)""".toRegex(), "+")
-        }
-        // Transform: +- -> - & "  " -> " "
+        while ("""(\+\+)|(--)""".toRegex().containsMatchIn(expr)) expr = expr.replace("""(\+\+)|(--)""".toRegex(), "+")
         while (expr.contains("+-")) expr = expr.replace("+-", "-")
-        logger.info("Transform: ++/-- -> +, +- -> -: \"$expr\"")
+        logger.info("Transform: ++/--   ->   +,    +-   ->   -   : \"$expr\"")
 
-        // "(-" -> "(0-" just to present "-a" as "(0-a)"
         while (expr.contains("(-")) expr = expr.replace("(-","(0-")
+        logger.info("""Transform: "(-" -> "(0-" just to present "-a" as "(0-a)"""")
 
-        // Validate: restricted sequence of operands
         if (""".*([+\-*/^])([+\-*/^]).*""".toRegex().containsMatchIn(expr)) {
             result = INVALID_EXPR
-            logger.info("validate: restricted sequence of operands")
-            return VALIDATION_ERROR
+            logger.warning("Validate: restricted sequence of operands")
+            return ERROR
         }
 
-        // Validate: скобки. После ( не может быть операнд кроме минуса, перед ) не может быть операнд e.g. (* or *)
         if ("""(.*(\()([+*/^]).*)|(.*([+\-*/^])(\)).*)""".toRegex().containsMatchIn(expr)) {
             result = INVALID_EXPR
-            logger.info("Validate: скобки. После ( не может быть операнд, перед ) не может быть операнд e.g. (* or *)")
-            return VALIDATION_ERROR
+            logger.warning("""Validate: Brackets. There can be no operand after the left bracket "(" e.g. (*. There can be no operand before the right bracket ")" e.g. *)""")
+            return ERROR
         }
 
-        // Validate: баланс скобок
         var balance = 0
         for (i in expr.indices) {
             when {
@@ -257,14 +236,14 @@ object Calc {
             }
             if (balance < 0) {
                 result = INVALID_EXPR
-                logger.info("Balance for \"()\" < 0")
-                return VALIDATION_ERROR
+                logger.warning("Balance for \"()\" < 0")
+                return ERROR
             }
         }
         if (balance != 0) {
             result = INVALID_EXPR
-            logger.info("Balance for \"()\" != 0")
-            return VALIDATION_ERROR
+            logger.warning("Balance for \"()\" != 0")
+            return ERROR
         }
 
         val valid = """[\w\d+\-*/^()]+""".toRegex().matches(expr) &&   // in expr only 0-9,+,-,*,/,^ and letters allowed
@@ -272,37 +251,33 @@ object Calc {
 
         if (!valid) {
             result = INVALID_EXPR
-            logger.info("Validate: нельзя иметь сложные условия")
-//                logger.info("""[\w\d+\-*/^()]+""".toRegex().matches(expr))
-//                logger.info(""".+[\w\d)]$""".toRegex().matches(expr))
-            return VALIDATION_ERROR
+            logger.warning("""Validate: troubles with conditions in "valid" variable""")
+            return ERROR
         }
 
         // Transform: insertion of whitespaces near operands
-        temp = ""
+        var temp = ""
         for (i in expr.indices) {
             if (expr[i].toString() in listOf("+", "-", "/", "*", "^", ")", "(")) temp += " " + expr[i] + " " else temp += expr[i]
         }
         expr = temp.trim()
         while (expr.contains("  ")) expr = expr.replace("  ", " ")
 
-        // Transform: "- 2 + ..." -> "(0 - 2) + ..."
-        if (expr[0] == '-') {
-            expr = "( 0 " + expr.replace("""^([-]\s\d+)""".toRegex(), "$1 )")
-        }
+        if (expr[0] == '-') expr = "( 0 " + expr.replace("""^([-]\s\d+)""".toRegex(), "$1 )")
+        logger.info("Transform: \"- 2 + ...\" -> \"(0 - 2) + ...")
 
         // Validate: for correct variables and insert values instead of variables
         temp = ""
         for (part in expr.split(" ")) {
             if (part[0].isLetter())
                 if (part in varList) {
-                    temp += if (varList[part]!! >= 0) varList[part]!!.toString() + " "
+                    temp += if (varList[part]!! >= BigInteger.ZERO) varList[part]!!.toString() + " "
                     else "( 0 - " + varList[part]!!.toString().drop(1) + " ) "
                 }
                 else {
                     result = INVALID_EXPR
-                    logger.info("unknown variable")
-                    return VALIDATION_ERROR
+                    logger.warning("Validate: unknown variable")
+                    return ERROR
                 }
             else temp += "$part "
         }
@@ -312,34 +287,51 @@ object Calc {
     }
 
     private fun compute(s2: String, s1: String, op: String): String {
-        val a = s1.toInt()
-        val b = s2.toInt()
-        var res: Int = 0
-        when (op) {
-            "+" -> res = a + b
-            "-" -> res = a - b
-            "/" -> {
-                if (b != 0) {
-                    res = a / b
+        try {
+            val a = s1.toBigInteger()
+            val b = s2.toBigInteger()
+            var res: BigInteger
+            when (op) {
+                "+" -> res = a + b
+                "-" -> res = a - b
+                "/" -> {
+                    if (b != BigInteger.ZERO) {
+                        res = a / b
+                    } else {
+                        logger.warning("Division by zero: $a / $b")
+                        return ERROR
+                    }
                 }
-                else {
-                    logger.info("Division by zero")
-                    return VALIDATION_ERROR
+                "*" -> res = a * b
+                "^" -> {
+                    var i = BigInteger.ONE
+                    res = a
+                    when {
+                        b == BigInteger.ZERO -> res = BigInteger.ONE
+                        b < BigInteger.ZERO -> res = BigInteger.ZERO
+                        else -> {
+                            while (i != b) {
+                                res *= a
+                                i++
+                            }
+                        }
+                    }
+                }
+                else -> {
+                    logger.warning("Unsupported operand. Only +-/*^ are supported.")
+                    return ERROR
                 }
             }
-            "*" -> res = a * b
-            "^" -> res = a.toDouble().pow(b.toDouble()).toInt()
-            else -> {
-                logger.info("Неподдерживаемый операнд")
-                return VALIDATION_ERROR
-            }
+            return res.toString()
+        } catch (e: Exception) {
+            logger.warning("Cannot convert params to BigInteger")
+            return ERROR
         }
-        return res.toString()
     }
 
-    private fun calculate(s: String) { // подумать потом вывести подстановку значений переменных выше
-        var expr = validateAndTransform(s)  // // e.g. "-12+   12 + -4 + 5 -   -6 - -- 7 ++++ -9 + a + b + 9 --- c"
-        if (expr == VALIDATION_ERROR || expr == SUCCESSFUL) return
+    private fun calculate(s: String) {
+        var expr = validateAndTransform(s)  // // e.g. s = "-12+   12 + -4 + 5 -   -6 - -- 7 ++++ -9 + a + b + 9 --- c"
+        if (expr == ERROR || expr == SUCCESSFUL) return
         expr = infixToPostfix(expr)
 
         for (part in expr.split(" ")) {
@@ -354,7 +346,7 @@ object Calc {
                         result = INVALID_EXPR
                         return
                     }
-                } // здесь можно вставить проверки try
+                }
             }
         }
         result = Stk.pop().toString()
